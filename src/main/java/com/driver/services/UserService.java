@@ -20,7 +20,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public User updateUser(Long id, String password) {
+    public User updateUserPassword(Long id, String password) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             user.setPassword(password);

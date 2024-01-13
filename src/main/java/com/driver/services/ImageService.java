@@ -18,17 +18,18 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    public Image addImage(Long blogId, String description, int dimensions) {
+    public String addImage(Long blogId, String description, int dimensions) {
         Blog blog = blogRepository.findById(blogId).orElse(null);
         if (blog != null) {
             Image image = new Image(description, dimensions, blog);
-            return imageRepository.save(image);
+            imageRepository.save(image);
+            return "Added image successfully";
         }
         return null;
     }
 
     public void deleteImage(Long id) {
-        imageRepository.deleteById(id);
+        imageRepository.delete(id);
     }
 
     public int countImagesInScreen(Long id, int screenDimensions) {

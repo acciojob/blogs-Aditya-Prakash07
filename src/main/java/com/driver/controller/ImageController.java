@@ -1,5 +1,6 @@
 package com.driver.controller;
 
+import com.driver.models.Image;
 import com.driver.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ public class ImageController {
 
     @PostMapping("/{blogId}/add-image")
     public ResponseEntity<String> addImage(@PathVariable Long blogId, @RequestParam String description, @RequestParam int dimensions) {
-        String response = imageService.addImage(description, dimensions, blogId);
+        String response = imageService.addImage(blogId, description, dimensions);
         if (response != null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
