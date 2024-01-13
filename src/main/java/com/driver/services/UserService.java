@@ -1,28 +1,31 @@
 package com.driver.services;
 
-import com.driver.models.*;
+import com.driver.models.User;
 import com.driver.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class UserService {
+
     @Autowired
-    UserRepository userRepository3;
+    private UserRepository userRepository;
 
-    public User createUser(String username, String password){
-
-
+    public User createUser(String username, String password) {
+        User user = new User(username, password);
+        return userRepository.save(user);
     }
 
-    public void deleteUser(int userId){
-
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 
-    public User updateUser(Integer id, String password){
-
+    public User updateUser(Long id, String password) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setPassword(password);
+            return userRepository.save(user);
+        }
+        return null;
     }
 }

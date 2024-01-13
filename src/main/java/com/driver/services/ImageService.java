@@ -1,7 +1,9 @@
 package com.driver.services;
 
-import com.driver.models.*;
-import com.driver.repositories.*;
+import com.driver.models.Blog;
+import com.driver.models.Image;
+import com.driver.repositories.BlogRepository;
+import com.driver.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,21 +13,38 @@ import java.util.List;
 public class ImageService {
 
     @Autowired
-    BlogRepository blogRepository2;
+    private BlogRepository blogRepository;
+
     @Autowired
-    ImageRepository imageRepository2;
+    private ImageRepository imageRepository;
 
-    public Image addImage(Integer blogId, String description, String dimensions){
-        //add an image to the blog
-
+    public Image addImage(Long blogId, String description, int dimensions) {
+        Blog blog = blogRepository.findById(blogId).orElse(null);
+        if (blog != null) {
+            Image image = new Image(description, dimensions, blog);
+            return imageRepository.save(image);
+        }
+        return null;
     }
 
-    public void deleteImage(Integer id){
-
+    public void deleteImage(Long id) {
+        imageRepository.deleteById(id);
     }
 
-    public int countImagesInScreen(Integer id, String screenDimensions) {
-        //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
-
+    public int countImagesInScreen(Long id, int screenDimensions) {
+        Blog blog = blogRepository.findById(id).orElse(null);
+        if (blog != null) {
+            List<Image> images = blog.getImages();
+            if (images != null) {
+                int count = 0;
+                for (Image image : images) {
+                    if (image.getDimensions() <= screenDimensions) {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+        return 0;
     }
 }
